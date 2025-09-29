@@ -63,7 +63,7 @@ Make each bullet point concise but descriptive. Focus on the most important and 
     let parsedData;
     try {
       parsedData = JSON.parse(response);
-    } catch (error) {
+    } catch {
       console.error('Failed to parse OpenAI response:', response);
       throw new Error('Failed to parse AI response');
     }

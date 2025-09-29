@@ -1,13 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import JobDescriptionPane from '@/components/JobDescriptionPane';
-import CoverLetterPane from '@/components/CoverLetterPane';
+import JobDescriptionPane from '../components/JobDescriptionPane';
+import CoverLetterPane from '../components/CoverLetterPane';
+
+interface ParsedData {
+  responsibilities: string[];
+  companyCulture: string[];
+  technicalSkills: string[];
+}
 
 export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
-  const [parsedData, setParsedData] = useState(null);
+  const [parsedData, setParsedData] = useState<ParsedData | null>(null);
 
   return (
     <div className="min-h-screen bg-gray-50">

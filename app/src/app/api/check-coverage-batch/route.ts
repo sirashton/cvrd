@@ -89,7 +89,7 @@ Provide one result object for each requirement in the same order as listed above
       }
       
       result = JSON.parse(cleanResponse);
-    } catch (error) {
+    } catch {
       console.error('Failed to parse OpenAI response:', response);
       throw new Error('Failed to parse AI response');
     }
