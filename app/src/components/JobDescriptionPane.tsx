@@ -14,6 +14,10 @@ interface JobDescriptionPaneProps {
   parsedData: ParsedData | null;
   setParsedData: (data: ParsedData | null) => void;
   coverLetter: string;
+  coverageResults: {[key: string]: {score: number, feedback: string}};
+  setCoverageResults: (results: {[key: string]: {score: number, feedback: string}}) => void;
+  onParseJobDescription: () => void;
+  onCheckCoverage: () => void;
 }
 
 export default function JobDescriptionPane({ 
@@ -21,10 +25,13 @@ export default function JobDescriptionPane({
   setJobDescription, 
   parsedData, 
   setParsedData,
-  coverLetter 
+  coverLetter,
+  coverageResults,
+  setCoverageResults,
+  onParseJobDescription,
+  onCheckCoverage
 }: JobDescriptionPaneProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [coverageResults, setCoverageResults] = useState<{[key: string]: {score: number, feedback: string}}>({});
 
   const handleParseJobDescription = async () => {
     if (!jobDescription.trim()) return;
@@ -45,6 +52,7 @@ export default function JobDescriptionPane({
 
       const data = await response.json();
       setParsedData(data);
+      onParseJobDescription(); // Trigger save
     } catch (error) {
       console.error('Error parsing job description:', error);
       alert('Failed to parse job description. Please try again.');
@@ -142,6 +150,7 @@ export default function JobDescriptionPane({
       }
 
       setCoverageResults(results);
+      onCheckCoverage(); // Trigger save
     } catch (error) {
       console.error('Error checking coverage:', error);
       alert('Failed to check coverage. Please try again.');

@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import JobDescriptionPane from '../components/JobDescriptionPane';
 import CoverLetterPane from '../components/CoverLetterPane';
+import RestoreModal from '../components/RestoreModal';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface ParsedData {
   responsibilities: string[];
@@ -14,6 +16,93 @@ export default function Home() {
   const [jobDescription, setJobDescription] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
   const [parsedData, setParsedData] = useState<ParsedData | null>(null);
+  const [coverageResults, setCoverageResults] = useState<{[key: string]: {score: number, feedback: string}}>({});
+  const [showRestoreModal, setShowRestoreModal] = useState(false);
+  const [hasShownRestoreModal, setHasShownRestoreModal] = useState(false);
+  
+  const { savedData, hasCheckedStorage, saveData, clearData } = useLocalStorage();
+
+  // Show restore modal when saved data is found
+  useEffect(() => {
+    if (hasCheckedStorage && savedData && !hasShownRestoreModal) {
+      console.log('📋 Showing restore modal for saved data');
+      setShowRestoreModal(true);
+      setHasShownRestoreModal(true);
+    }
+  }, [hasCheckedStorage, savedData, hasShownRestoreModal]);
+
+  // Auto-save data every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (jobDescription || coverLetter || parsedData) {
+        saveData({
+          jobDescription,
+          coverLetter,
+          parsedData,
+          coverageResults
+        });
+      }
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [jobDescription, coverLetter, parsedData, coverageResults, saveData]);
+
+  // Save data when important actions happen
+  const handleParseJobDescription = () => {
+    // This will be called from JobDescriptionPane
+    setTimeout(() => {
+      saveData({
+        jobDescription,
+        coverLetter,
+        parsedData,
+        coverageResults
+      });
+    }, 100);
+  };
+
+  const handleCheckCoverage = () => {
+    // This will be called from JobDescriptionPane
+    setTimeout(() => {
+      saveData({
+        jobDescription,
+        coverLetter,
+        parsedData,
+        coverageResults
+      });
+    }, 100);
+  };
+
+  const handleRestoreData = () => {
+    if (savedData) {
+      console.log('🔄 Restoring previous work:', {
+        jobDescriptionLength: savedData.jobDescription?.length || 0,
+        coverLetterLength: savedData.coverLetter?.length || 0,
+        hasParsedData: !!savedData.parsedData,
+        parsedDataSummary: savedData.parsedData ? {
+          responsibilities: savedData.parsedData.responsibilities?.length || 0,
+          companyCulture: savedData.parsedData.companyCulture?.length || 0,
+          technicalSkills: savedData.parsedData.technicalSkills?.length || 0
+        } : null,
+        coverageResultsCount: Object.keys(savedData.coverageResults || {}).length,
+        lastSaved: savedData.lastSaved
+      });
+      setJobDescription(savedData.jobDescription);
+      setCoverLetter(savedData.coverLetter);
+      setParsedData(savedData.parsedData);
+      setCoverageResults(savedData.coverageResults);
+    }
+    setShowRestoreModal(false);
+  };
+
+  const handleStartFresh = () => {
+    console.log('🆕 Starting fresh - clearing all data');
+    clearData();
+    setJobDescription('');
+    setCoverLetter('');
+    setParsedData(null);
+    setCoverageResults({});
+    setShowRestoreModal(false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -21,7 +110,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <h1 className="text-2xl font-bold text-gray-900">Cover Letter Generator</h1>
-            <p className="text-sm text-gray-500">AI-powered job application assistant</p>
+            <div className="flex items-center gap-4">
+              <p className="text-sm text-gray-500">AI-powered job application assistant</p>
+              <button
+                onClick={handleStartFresh}
+                className="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+              >
+                Start Fresh
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -34,6 +131,10 @@ export default function Home() {
             parsedData={parsedData}
             setParsedData={setParsedData}
             coverLetter={coverLetter}
+            coverageResults={coverageResults}
+            setCoverageResults={setCoverageResults}
+            onParseJobDescription={handleParseJobDescription}
+            onCheckCoverage={handleCheckCoverage}
           />
           <CoverLetterPane 
             coverLetter={coverLetter}
@@ -41,6 +142,13 @@ export default function Home() {
           />
         </div>
       </main>
+
+      <RestoreModal
+        isOpen={showRestoreModal}
+        onRestore={handleRestoreData}
+        onStartFresh={handleStartFresh}
+        lastSaved={savedData?.lastSaved || ''}
+      />
     </div>
   );
 }
