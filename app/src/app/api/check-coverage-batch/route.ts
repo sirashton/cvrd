@@ -89,7 +89,7 @@ Provide one result object for each requirement in the same order as listed above
       }
       
       result = JSON.parse(cleanResponse);
-    } catch (parseError) {
+    } catch (error) {
       console.error('Failed to parse OpenAI response:', response);
       throw new Error('Failed to parse AI response');
     }
@@ -100,7 +100,7 @@ Provide one result object for each requirement in the same order as listed above
     }
 
     // Ensure scores are within valid range
-    result.results = result.results.map((item: any) => ({
+    result.results = result.results.map((item: { score: number; feedback: string }) => ({
       ...item,
       score: Math.max(0, Math.min(100, item.score))
     }));

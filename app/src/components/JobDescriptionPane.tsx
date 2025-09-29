@@ -80,7 +80,7 @@ export default function JobDescriptionPane({
 
           if (response.ok) {
             const data = await response.json();
-            data.results.forEach((result: any, index: number) => {
+            data.results.forEach((result: { score: number; feedback: string }, index: number) => {
               results[`resp-${index}`] = result;
             });
           }
@@ -106,7 +106,7 @@ export default function JobDescriptionPane({
 
           if (response.ok) {
             const data = await response.json();
-            data.results.forEach((result: any, index: number) => {
+            data.results.forEach((result: { score: number; feedback: string }, index: number) => {
               results[`culture-${index}`] = result;
             });
           }
@@ -132,7 +132,7 @@ export default function JobDescriptionPane({
 
           if (response.ok) {
             const data = await response.json();
-            data.results.forEach((result: any, index: number) => {
+            data.results.forEach((result: { score: number; feedback: string }, index: number) => {
               results[`skill-${index}`] = result;
             });
           }
