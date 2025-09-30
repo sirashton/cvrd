@@ -34,7 +34,7 @@ Please respond with a JSON object in this exact format:
   "technicalSkills": ["skill 1", "skill 2", ...]
 }
 
-Make each bullet point concise but descriptive. Focus on the most important and specific requirements.
+Make each bullet point concise but descriptive. Focus on the most important and specific requirements. Do not infer any information from the job description that is not explicitly stated.
 `;
 
     const completion = await openai.chat.completions.create({

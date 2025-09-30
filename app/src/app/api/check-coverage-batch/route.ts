@@ -43,11 +43,11 @@ Respond with JSON in this exact format:
   "results": [
     {
       "score": 85,
-      "feedback": "The cover letter demonstrates strong experience with React and provides specific examples of projects built using this technology."
+      "feedback": "Strong experience with React and provides specific examples of projects built using this technology."
     },
     {
       "score": 45,
-      "feedback": "The cover letter mentions leadership but doesn't provide specific examples of team management experience."
+      "feedback": "Mentions leadership (Example: Led a team of 10 employees) but doesn't provide specific examples of team management experience."
     }
   ]
 }
@@ -56,7 +56,7 @@ Provide one result object for each requirement in the same order as listed above
 `;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-5-nano",
       messages: [
         {
           role: "system",
@@ -67,8 +67,8 @@ Provide one result object for each requirement in the same order as listed above
           content: prompt
         }
       ],
-      temperature: 0.3,
-      max_tokens: 1000,
+      // temperature: 0.3,
+      // max_tokens: 5000,
     });
 
     const response = completion.choices[0]?.message?.content;
