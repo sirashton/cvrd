@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import JobDescriptionPane from '../components/JobDescriptionPane';
 import CoverLetterPane from '../components/CoverLetterPane';
 import RestoreModal from '../components/RestoreModal';
+import NeobrutalistButton from '../components/NeobrutalistButton';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface ParsedData {
@@ -109,15 +110,24 @@ export default function Home() {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Cover Letter Generator</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-gray-900">We&apos;ve got you </h1><NeobrutalistButton
+                color="orange"
+                pressable={false}
+                logo={true}
+              >
+                CVRD
+              </NeobrutalistButton>
+            </div>
             <div className="flex items-center gap-4">
-              <p className="text-sm text-gray-500">AI-powered job application assistant</p>
-              <button
+              <p className="text-sm text-gray-500">AI-powered cover letter assistant</p>
+              <NeobrutalistButton
                 onClick={handleStartFresh}
-                className="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                color="gray"
+                className="text-sm px-4 py-2"
               >
                 Start Fresh
-              </button>
+              </NeobrutalistButton>
             </div>
           </div>
         </div>

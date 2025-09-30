@@ -1,3 +1,5 @@
+import NeobrutalistButton from './NeobrutalistButton';
+
 interface RestoreModalProps {
   isOpen: boolean;
   onRestore: () => void;
@@ -24,18 +26,20 @@ export default function RestoreModal({ isOpen, onRestore, onStartFresh, lastSave
         </p>
         
         <div className="flex gap-3">
-          <button
+          <NeobrutalistButton
             onClick={onRestore}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            color="blue"
+            className="flex-1"
           >
             Restore Previous Work
-          </button>
-          <button
+          </NeobrutalistButton>
+          <NeobrutalistButton
             onClick={onStartFresh}
-            className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+            color="gray"
+            className="flex-1"
           >
             Start Fresh
-          </button>
+          </NeobrutalistButton>
         </div>
       </div>
     </div>
