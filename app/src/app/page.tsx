@@ -112,13 +112,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900">We&apos;ve got you </h1><NeobrutalistButton
+              <h1 className="text-2xl font-bold text-gray-900">Have you </h1>
+              <NeobrutalistButton
                 color="orange"
                 pressable={false}
                 logo={true}
               >
                 CVRD
               </NeobrutalistButton>
+              <h1 className="text-2xl font-bold text-gray-900">everything?</h1>
             </div>
             <div className="flex items-center gap-4">
               <p className="text-sm text-gray-500">AI-powered cover letter assistant</p>
