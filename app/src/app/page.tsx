@@ -5,6 +5,7 @@ import JobDescriptionPane from '../components/JobDescriptionPane';
 import CoverLetterPane from '../components/CoverLetterPane';
 import RestoreModal from '../components/RestoreModal';
 import NeobrutalistButton from '../components/NeobrutalistButton';
+import BuyMeACoffeeButton from '../components/BuyMeACoffeeButton';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface ParsedData {
@@ -106,7 +107,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
@@ -121,6 +122,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <p className="text-sm text-gray-500">AI-powered cover letter assistant</p>
+              <BuyMeACoffeeButton size="small" />
               <NeobrutalistButton
                 onClick={handleStartFresh}
                 color="gray"
@@ -133,8 +135,8 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-[calc(100vh-200px)]">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
           <JobDescriptionPane 
             jobDescription={jobDescription}
             setJobDescription={setJobDescription}
@@ -152,6 +154,29 @@ export default function Home() {
           />
         </div>
       </main>
+
+      <footer className="bg-white border-t border-gray-200 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+              <NeobrutalistButton
+                color="gray"
+                pressable={false}
+                className="text-xs px-2 py-1"
+              >
+                CVRD
+              </NeobrutalistButton>
+              <span className="text-sm text-gray-500">Cover Letter Analyst</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-500">
+                Given freely to the world by <a href="https://www.linkedin.com/in/alex-e-ashton/" className="text-blue-500 hover:text-blue-600">Alex Ashton</a>
+              </div>
+              <BuyMeACoffeeButton size="small" />
+            </div>
+          </div>
+        </div>
+      </footer>
 
       <RestoreModal
         isOpen={showRestoreModal}
