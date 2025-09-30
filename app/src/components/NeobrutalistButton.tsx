@@ -44,8 +44,7 @@ export default function NeobrutalistButton({
     border-4 border-[rgb(75,85,99)] rounded-4xl
     shadow-[4px_4px_0px_0px_rgb(75,85,99)]
     transition-all duration-150 ease-out
-    ${logo ? 'text-2xl px-6 py-3' : 'text-sm'}
-    ${logo ? 'px-1 py-0' : 'px-4 py-2'}
+    ${logo ? 'text-2xl px-4 py-1' : 'px-4 py-2 text-sm'}
     ${pressable ? `
       hover:shadow-[2px_2px_0px_0px_rgb(75,85,99)]
       hover:translate-x-[2px] hover:translate-y-[2px]
