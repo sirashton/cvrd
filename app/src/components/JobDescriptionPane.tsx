@@ -210,10 +210,12 @@ export default function JobDescriptionPane({
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-gray-400 mt-1">•</span>
                       <div className="flex-1">
-                        <span className="text-sm text-gray-700">{item}</span>
+                        <div className="flex items-center gap-2 mb-1">
+                          {result && <CoverageScore score={result.score} />}
+                          <span className="text-sm text-gray-700">{item}</span>
+                        </div>
                         {result && (
-                          <div className="mt-1 flex items-center gap-2">
-                            <CoverageScore score={result.score} />
+                          <div className="mt-1">
                             <span className="text-xs text-gray-600">{result.feedback}</span>
                           </div>
                         )}
@@ -233,10 +235,12 @@ export default function JobDescriptionPane({
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-gray-400 mt-1">•</span>
                       <div className="flex-1">
-                        <span className="text-sm text-gray-700">{item}</span>
+                        <div className="flex items-center gap-2 mb-1">
+                          {result && <CoverageScore score={result.score} />}
+                          <span className="text-sm text-gray-700">{item}</span>
+                        </div>
                         {result && (
-                          <div className="mt-1 flex items-center gap-2">
-                            <CoverageScore score={result.score} />
+                          <div className="mt-1">
                             <span className="text-xs text-gray-600">{result.feedback}</span>
                           </div>
                         )}
@@ -256,10 +260,12 @@ export default function JobDescriptionPane({
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-gray-400 mt-1">•</span>
                       <div className="flex-1">
-                        <span className="text-sm text-gray-700">{item}</span>
+                        <div className="flex items-center gap-2 mb-1">
+                          {result && <CoverageScore score={result.score} />}
+                          <span className="text-sm text-gray-700">{item}</span>
+                        </div>
                         {result && (
-                          <div className="mt-1 flex items-center gap-2">
-                            <CoverageScore score={result.score} />
+                          <div className="mt-1">
                             <span className="text-xs text-gray-600">{result.feedback}</span>
                           </div>
                         )}
