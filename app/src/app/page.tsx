@@ -122,7 +122,18 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <p className="text-sm text-gray-500">AI-powered cover letter assistant</p>
-              <BuyMeACoffeeButton size="small" />
+              <a
+                href="https://buymeacoffee.com/alexashton"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <NeobrutalistButton
+                  color="yellow"
+                  className="text-sm px-4 py-2"
+                >
+                  ☕ Buy me a coffee
+                </NeobrutalistButton>
+              </a>
               <NeobrutalistButton
                 onClick={handleStartFresh}
                 color="gray"
