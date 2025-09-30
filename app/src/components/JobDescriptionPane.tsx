@@ -74,10 +74,13 @@ export default function JobDescriptionPane({
     try {
       const results: {[key: string]: {score: number, feedback: string}} = {};
 
+      // Create array of promises for parallel execution
+      const promises = [];
+
       // Check responsibilities
       if (parsedData.responsibilities.length > 0) {
-        try {
-          const response = await fetch('/api/check-coverage-batch', {
+        promises.push(
+          fetch('/api/check-coverage-batch', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -87,23 +90,23 @@ export default function JobDescriptionPane({
               bulletPoints: parsedData.responsibilities,
               coverLetter
             }),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            data.results.forEach((result: { score: number; feedback: string }, index: number) => {
-              results[`resp-${index}`] = result;
-            });
-          }
-        } catch (error) {
-          console.error('Error checking responsibilities:', error);
-        }
+          }).then(async (response) => {
+            if (response.ok) {
+              const data = await response.json();
+              data.results.forEach((result: { score: number; feedback: string }, index: number) => {
+                results[`resp-${index}`] = result;
+              });
+            }
+          }).catch((error) => {
+            console.error('Error checking responsibilities:', error);
+          })
+        );
       }
 
       // Check company culture
       if (parsedData.companyCulture.length > 0) {
-        try {
-          const response = await fetch('/api/check-coverage-batch', {
+        promises.push(
+          fetch('/api/check-coverage-batch', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -113,23 +116,23 @@ export default function JobDescriptionPane({
               bulletPoints: parsedData.companyCulture,
               coverLetter
             }),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            data.results.forEach((result: { score: number; feedback: string }, index: number) => {
-              results[`culture-${index}`] = result;
-            });
-          }
-        } catch (error) {
-          console.error('Error checking company culture:', error);
-        }
+          }).then(async (response) => {
+            if (response.ok) {
+              const data = await response.json();
+              data.results.forEach((result: { score: number; feedback: string }, index: number) => {
+                results[`culture-${index}`] = result;
+              });
+            }
+          }).catch((error) => {
+            console.error('Error checking company culture:', error);
+          })
+        );
       }
 
       // Check technical skills
       if (parsedData.technicalSkills.length > 0) {
-        try {
-          const response = await fetch('/api/check-coverage-batch', {
+        promises.push(
+          fetch('/api/check-coverage-batch', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -139,18 +142,21 @@ export default function JobDescriptionPane({
               bulletPoints: parsedData.technicalSkills,
               coverLetter
             }),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            data.results.forEach((result: { score: number; feedback: string }, index: number) => {
-              results[`skill-${index}`] = result;
-            });
-          }
-        } catch (error) {
-          console.error('Error checking technical skills:', error);
-        }
+          }).then(async (response) => {
+            if (response.ok) {
+              const data = await response.json();
+              data.results.forEach((result: { score: number; feedback: string }, index: number) => {
+                results[`skill-${index}`] = result;
+              });
+            }
+          }).catch((error) => {
+            console.error('Error checking technical skills:', error);
+          })
+        );
       }
+
+      // Wait for all requests to complete in parallel
+      await Promise.all(promises);
 
       setCoverageResults(results);
       onCheckCoverage(); // Trigger save
