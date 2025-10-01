@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import JobDescriptionPane from '../components/JobDescriptionPane';
 import CoverLetterPane from '../components/CoverLetterPane';
 import RestoreModal from '../components/RestoreModal';
+import MobileWarning from '../components/MobileWarning';
 import NeobrutalistButton from '../components/NeobrutalistButton';
 import BuyMeACoffeeButton from '../components/BuyMeACoffeeButton';
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -108,6 +109,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      <MobileWarning />
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
