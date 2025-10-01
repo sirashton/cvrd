@@ -17,6 +17,7 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
   const [selectedRange, setSelectedRange] = useState<Range | null>(null);
   const [highlightedRange, setHighlightedRange] = useState<{ start: number; end: number } | null>(null);
   const [sentenceImproverEnabled, setSentenceImproverEnabled] = useState(false);
+  const [improvementMode, setImprovementMode] = useState<'evolve' | 'cut'>('evolve');
 
   // Update content when coverLetter prop changes
   useEffect(() => {
@@ -243,6 +244,39 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
           </div>
         )}
       </div>
+
+      {sentenceImproverEnabled && (
+        <div className="mb-4 flex items-center gap-4">
+          <label className="text-sm font-medium text-gray-700">
+            Mode:
+          </label>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setImprovementMode('evolve')}
+              className={`px-3 py-1 text-xs font-medium border-2 rounded-full transition-colors ${
+                improvementMode === 'evolve'
+                  ? 'bg-blue-500 text-white border-blue-700 shadow-[2px_2px_0px_0px_rgb(30,58,138)]'
+                  : 'bg-gray-100 text-gray-700 border-gray-400 shadow-[2px_2px_0px_0px_rgb(107,114,128)] hover:bg-gray-200'
+              }`}
+            >
+              Evolve
+            </button>
+            <button
+              onClick={() => setImprovementMode('cut')}
+              className={`px-3 py-1 text-xs font-medium border-2 rounded-full transition-colors ${
+                improvementMode === 'cut'
+                  ? 'bg-orange-500 text-white border-orange-700 shadow-[2px_2px_0px_0px_rgb(194,65,12)]'
+                  : 'bg-gray-100 text-gray-700 border-gray-400 shadow-[2px_2px_0px_0px_rgb(107,114,128)] hover:bg-gray-200'
+              }`}
+            >
+              Waffle Cutter
+            </button>
+          </div>
+          <div className="text-xs text-gray-500">
+            {improvementMode === 'evolve' ? 'Improve and refine' : 'Cut down and simplify'}
+          </div>
+        </div>
+      )}
       
       <div className="relative h-full">
         <div
@@ -263,6 +297,7 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
           isVisible={showMenu}
           position={menuPosition}
           currentSentence={currentSentence}
+          improvementMode={improvementMode}
           onClose={handleCloseMenu}
           onReplace={handleReplaceSentence}
         />

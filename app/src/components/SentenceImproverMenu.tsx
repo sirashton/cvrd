@@ -7,6 +7,7 @@ interface SentenceImproverMenuProps {
   isVisible: boolean;
   position: { x: number; y: number };
   currentSentence: string;
+  improvementMode: 'evolve' | 'cut';
   onClose: () => void;
   onReplace: (newSentence: string) => void;
 }
@@ -20,6 +21,7 @@ export default function SentenceImproverMenu({
   isVisible,
   position,
   currentSentence,
+  improvementMode,
   onClose,
   onReplace
 }: SentenceImproverMenuProps) {
@@ -32,12 +34,16 @@ export default function SentenceImproverMenu({
     if (isVisible && currentSentence.trim()) {
       fetchSuggestions();
     }
-  }, [isVisible, currentSentence]);
+  }, [isVisible, currentSentence, improvementMode]);
 
   const fetchSuggestions = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/improve-sentence', {
+      const endpoint = improvementMode === 'evolve' 
+        ? '/api/improve-sentence' 
+        : '/api/cut-sentence';
+        
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +135,9 @@ export default function SentenceImproverMenu({
       }}
     >
       <div className="mb-3">
-        <h4 className="text-sm font-semibold text-gray-900 mb-2">Improve this sentence:</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-2">
+          {improvementMode === 'evolve' ? 'Improve this sentence:' : 'Cut down this sentence:'}
+        </h4>
         <p className="text-xs text-gray-600 italic bg-gray-50 p-2 rounded border">
           "{currentSentence}"
         </p>
