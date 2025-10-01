@@ -14,7 +14,6 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
   const [showMenu, setShowMenu] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [currentSentence, setCurrentSentence] = useState('');
-  const [selectedRange, setSelectedRange] = useState<Range | null>(null);
   const [highlightedRange, setHighlightedRange] = useState<{ start: number; end: number } | null>(null);
   const [sentenceImproverEnabled, setSentenceImproverEnabled] = useState(false);
   const [improvementMode, setImprovementMode] = useState<'evolve' | 'cut'>('evolve');
@@ -121,7 +120,7 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
   };
 
   // Handle click events
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = () => {
     // Only show sentence improver if enabled
     if (!sentenceImproverEnabled) return;
     
@@ -137,7 +136,6 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
     
     if (sentenceData.sentence.trim()) {
       setCurrentSentence(sentenceData.sentence);
-      setSelectedRange(range);
       setHighlightedRange({ start: sentenceData.start, end: sentenceData.end });
       
             // Calculate menu position with smart bounds checking
@@ -199,7 +197,6 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
     clearHighlights();
     setShowMenu(false);
     setCurrentSentence('');
-    setSelectedRange(null);
     setHighlightedRange(null);
   };
 

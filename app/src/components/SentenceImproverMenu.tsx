@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import NeobrutalistButton from './NeobrutalistButton';
 
 interface SentenceImproverMenuProps {
@@ -29,14 +29,7 @@ export default function SentenceImproverMenu({
   const [suggestionData, setSuggestionData] = useState<SuggestionData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch suggestions when menu becomes visible
-  useEffect(() => {
-    if (isVisible && currentSentence.trim()) {
-      fetchSuggestions();
-    }
-  }, [isVisible, currentSentence, improvementMode]);
-
-  const fetchSuggestions = async () => {
+  const fetchSuggestions = useCallback(async () => {
     setIsLoading(true);
     try {
       const endpoint = improvementMode === 'evolve' 
@@ -64,7 +57,14 @@ export default function SentenceImproverMenu({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [improvementMode, currentSentence]);
+
+  // Fetch suggestions when menu becomes visible
+  useEffect(() => {
+    if (isVisible && currentSentence.trim()) {
+      fetchSuggestions();
+    }
+  }, [isVisible, currentSentence, improvementMode, fetchSuggestions]);
 
   // Helper function to highlight changes in text
   const highlightChanges = (suggestion: string, changes: Array<{ from: string; to: string }>) => {
@@ -139,7 +139,7 @@ export default function SentenceImproverMenu({
           {improvementMode === 'evolve' ? 'Improve this sentence:' : 'Cut down this sentence:'}
         </h4>
         <p className="text-xs text-gray-600 italic bg-gray-50 p-2 rounded border">
-          "{currentSentence}"
+          &ldquo;{currentSentence}&rdquo;
         </p>
       </div>
 
