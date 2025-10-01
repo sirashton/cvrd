@@ -4,16 +4,14 @@ import { useState, useEffect } from 'react';
 import NeobrutalistButton from './NeobrutalistButton';
 
 export default function MobileWarning() {
-  const [isMobile, setIsMobile] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+      const userAgent = navigator.userAgent || navigator.vendor || (window as unknown as { opera?: string }).opera || '';
       const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
       const isSmallScreen = window.innerWidth < 768; // Tailwind's md breakpoint
       
-      setIsMobile(isMobileDevice || isSmallScreen);
       setIsVisible(isMobileDevice || isSmallScreen);
     };
 
