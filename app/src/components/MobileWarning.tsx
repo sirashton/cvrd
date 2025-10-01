@@ -9,8 +9,8 @@ export default function MobileWarning() {
   useEffect(() => {
     const checkMobile = () => {
       const userAgent = navigator.userAgent || navigator.vendor || (window as unknown as { opera?: string }).opera || '';
-      const isMobileDevice = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-      const isSmallScreen = window.innerWidth < 768; // Tailwind's md breakpoint
+      const isMobileDevice = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+      const isSmallScreen = window.innerWidth < 480; // Only very small screens
       
       setIsVisible(isMobileDevice || isSmallScreen);
     };

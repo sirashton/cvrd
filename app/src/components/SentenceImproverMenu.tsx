@@ -127,7 +127,7 @@ export default function SentenceImproverMenu({
   return (
     <div
       ref={menuRef}
-      className="fixed z-50 bg-white rounded-lg border-3 border-[rgb(75,85,99)] shadow-[3px_3px_0px_0px_rgb(75,85,99)] p-4 min-w-96 max-w-4xl"
+      className="fixed z-50 bg-white rounded-lg border-3 border-[rgb(75,85,99)] shadow-[3px_3px_0px_0px_rgb(75,85,99)] p-4 min-w-80 sm:min-w-96 max-w-4xl mx-2 sm:mx-0"
       style={{
         left: position.x,
         top: position.y,
@@ -150,7 +150,7 @@ export default function SentenceImproverMenu({
             <div className="text-sm text-gray-500">Generating suggestions...</div>
           </div>
         ) : suggestionData ? (
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {suggestionData.suggestions.map((suggestion, index) => (
               <div
                 key={index}

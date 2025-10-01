@@ -206,51 +206,51 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
       subtitle={sentenceImproverEnabled ? "Write your cover letter here - click on any sentence to improve it" : "Write your cover letter here"}
     >
       {/* Toggle for sentence improver */}
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-gray-700">
-            Sentence Improver: (BETA)
-          </label>
-          <button
-            onClick={() => {
-              setSentenceImproverEnabled(!sentenceImproverEnabled);
-              // Clear any active highlights when toggling off
-              if (sentenceImproverEnabled) {
-                clearHighlights();
-                setShowMenu(false);
-              }
-            }}
-            className={`relative inline-flex h-8 w-16 items-center border-3 rounded-full focus:outline-none ${
-              sentenceImproverEnabled 
-                ? 'bg-blue-500 border-blue-700 shadow-[3px_3px_0px_0px_rgb(30,58,138)]' 
-                : 'bg-gray-200 border-gray-400 shadow-[3px_3px_0px_0px_rgb(107,114,128)]'
-            }`}
-          >
-            <span
-              className={`inline-block h-6 w-6 transform rounded-full border-2 transition-transform ${
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <label className="text-sm font-medium text-gray-700">
+              Sentence Improver: (BETA)
+            </label>
+            <button
+              onClick={() => {
+                setSentenceImproverEnabled(!sentenceImproverEnabled);
+                // Clear any active highlights when toggling off
+                if (sentenceImproverEnabled) {
+                  clearHighlights();
+                  setShowMenu(false);
+                }
+              }}
+              className={`relative inline-flex h-8 w-16 items-center border-3 rounded-full focus:outline-none ${
                 sentenceImproverEnabled 
-                  ? 'translate-x-8 bg-white border-blue-700 shadow-[2px_2px_0px_0px_rgb(30,58,138)]' 
-                  : 'translate-x-1 bg-white border-gray-400 shadow-[2px_2px_0px_0px_rgb(107,114,128)]'
+                  ? 'bg-blue-500 border-blue-700 shadow-[3px_3px_0px_0px_rgb(30,58,138)]' 
+                  : 'bg-gray-200 border-gray-400 shadow-[3px_3px_0px_0px_rgb(107,114,128)]'
               }`}
-            />
-          </button>
-        </div>
-        {sentenceImproverEnabled && (
-          <div className="text-xs text-gray-500">
-            Click any sentence to improve it
+            >
+              <span
+                className={`inline-block h-6 w-6 transform rounded-full border-2 transition-transform ${
+                  sentenceImproverEnabled 
+                    ? 'translate-x-8 bg-white border-blue-700 shadow-[2px_2px_0px_0px_rgb(30,58,138)]' 
+                    : 'translate-x-1 bg-white border-gray-400 shadow-[2px_2px_0px_0px_rgb(107,114,128)]'
+                }`}
+              />
+            </button>
           </div>
-        )}
-      </div>
+          {sentenceImproverEnabled && (
+            <div className="text-xs text-gray-500 text-center sm:text-left">
+              Click any sentence to improve it
+            </div>
+          )}
+        </div>
 
       {sentenceImproverEnabled && (
-        <div className="mb-4 flex items-center gap-4">
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
           <label className="text-sm font-medium text-gray-700">
             Mode:
           </label>
           <div className="flex gap-2">
             <button
               onClick={() => setImprovementMode('evolve')}
-              className={`px-3 py-1 text-xs font-medium border-2 rounded-full transition-colors ${
+              className={`px-3 py-1 text-xs font-medium border-2 rounded-full transition-colors min-h-[44px] ${
                 improvementMode === 'evolve'
                   ? 'bg-blue-500 text-white border-blue-700 shadow-[2px_2px_0px_0px_rgb(30,58,138)]'
                   : 'bg-gray-100 text-gray-700 border-gray-400 shadow-[2px_2px_0px_0px_rgb(107,114,128)] hover:bg-gray-200'
@@ -260,7 +260,7 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
             </button>
             <button
               onClick={() => setImprovementMode('cut')}
-              className={`px-3 py-1 text-xs font-medium border-2 rounded-full transition-colors ${
+              className={`px-3 py-1 text-xs font-medium border-2 rounded-full transition-colors min-h-[44px] ${
                 improvementMode === 'cut'
                   ? 'bg-orange-500 text-white border-orange-700 shadow-[2px_2px_0px_0px_rgb(194,65,12)]'
                   : 'bg-gray-100 text-gray-700 border-gray-400 shadow-[2px_2px_0px_0px_rgb(107,114,128)] hover:bg-gray-200'
@@ -269,7 +269,7 @@ export default function CoverLetterPane({ coverLetter, setCoverLetter }: CoverLe
               Waffle Cutter
             </button>
           </div>
-          <div className="text-xs text-gray-500">
+          <div className="text-xs text-gray-500 text-center sm:text-left">
             {improvementMode === 'evolve' ? 'Improve and refine' : 'Cut down and simplify'}
           </div>
         </div>

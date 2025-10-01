@@ -111,47 +111,50 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <MobileWarning />
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-gray-900">Have you </h1>
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center py-3 sm:py-4 gap-3 sm:gap-0">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Have you </h1>
               <NeobrutalistButton
                 color="orange"
                 pressable={false}
                 logo={true}
+                className="text-sm sm:text-base"
               >
                 CVRD
               </NeobrutalistButton>
-              <h1 className="text-2xl font-bold text-gray-900">everything?</h1>
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">everything?</h1>
             </div>
-            <div className="flex items-center gap-4">
-              <p className="text-sm text-gray-500">AI-powered cover letter assistant</p>
-              <a
-                href="https://buymeacoffee.com/alexashton"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <NeobrutalistButton
-                  color="yellow"
-                  className="text-sm px-4 py-2"
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+              <p className="text-xs sm:text-sm text-gray-500 text-center sm:text-left">AI-powered cover letter assistant</p>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <a
+                  href="https://buymeacoffee.com/alexashton"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  ☕ Buy me a coffee
+                  <NeobrutalistButton
+                    color="yellow"
+                    className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2"
+                  >
+                    ☕ Buy me a coffee
+                  </NeobrutalistButton>
+                </a>
+                <NeobrutalistButton
+                  onClick={handleStartFresh}
+                  color="gray"
+                  className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2"
+                >
+                  Start Fresh
                 </NeobrutalistButton>
-              </a>
-              <NeobrutalistButton
-                onClick={handleStartFresh}
-                color="gray"
-                className="text-sm px-4 py-2"
-              >
-                Start Fresh
-              </NeobrutalistButton>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+      <main className="flex-1 max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8 w-full">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 h-full">
           <JobDescriptionPane 
             jobDescription={jobDescription}
             setJobDescription={setJobDescription}
@@ -171,8 +174,8 @@ export default function Home() {
       </main>
 
       <footer className="bg-white border-t border-gray-200 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
             <div className="flex items-center gap-2">
               <NeobrutalistButton
                 color="gray"
@@ -181,10 +184,10 @@ export default function Home() {
               >
                 CVRD
               </NeobrutalistButton>
-              <span className="text-sm text-gray-500">Cover Letter Analyst</span>
+              <span className="text-xs sm:text-sm text-gray-500">Cover Letter Analyst</span>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-500">
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+              <div className="text-xs sm:text-sm text-gray-500 text-center sm:text-left">
                 Given freely to the world by <a href="https://www.linkedin.com/in/alex-e-ashton/" className="text-blue-500 hover:text-blue-600">Alex Ashton</a>
               </div>
               <BuyMeACoffeeButton size="small" />
