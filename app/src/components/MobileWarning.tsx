@@ -8,6 +8,13 @@ export default function MobileWarning() {
 
   useEffect(() => {
     const checkMobile = () => {
+      // Check if user has already been warned
+      const hasBeenWarned = localStorage.getItem('cvrd-mobile-warning-dismissed');
+      if (hasBeenWarned === 'true') {
+        setIsVisible(false);
+        return;
+      }
+
       const userAgent = navigator.userAgent || navigator.vendor || (window as unknown as { opera?: string }).opera || '';
       const isMobileDevice = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
       const isSmallScreen = window.innerWidth < 480; // Only very small screens
@@ -38,9 +45,16 @@ export default function MobileWarning() {
             This web app is designed for desktop use. For the best experience, 
             please try it on a computer or tablet with a larger screen.
           </p>
+          <p className="text-xs text-gray-500 mb-4">
+            This warning won&apos;t show again after you continue.
+          </p>
           <div className="flex justify-center">
             <NeobrutalistButton
-              onClick={() => setIsVisible(false)}
+              onClick={() => {
+                // Save dismissal to localStorage
+                localStorage.setItem('cvrd-mobile-warning-dismissed', 'true');
+                setIsVisible(false);
+              }}
               color="blue"
               className="px-6 py-2"
             >
