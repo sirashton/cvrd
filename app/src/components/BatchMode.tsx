@@ -83,27 +83,95 @@ export default function BatchMode({
     }
   };
 
-  const handleFiles = async (newFiles: File[]) => {
-    const batchFiles: BatchFile[] = await Promise.all(
-      newFiles.map(async (file) => {
-        let content = '';
-        try {
-          content = await file.text();
-        } catch (error) {
-          console.error('Error reading file:', error);
-        }
-        
-        return {
-          id: Math.random().toString(36).substr(2, 9),
-          name: file.name,
-          file,
-          content,
-          status: 'pending' as const
-        };
-      })
-    );
+  const parseFileContent = async (file: File): Promise<string> => {
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
     
-    setFiles(prev => [...prev, ...batchFiles]);
+    switch (fileExtension) {
+      case 'txt':
+        return await file.text();
+      
+      case 'pdf':
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          
+          const response = await fetch('/api/parse-pdf', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to parse PDF');
+          }
+          
+          const data = await response.json();
+          return data.text;
+        } catch (error) {
+          console.error('Error parsing PDF:', error);
+          throw new Error('Failed to parse PDF file');
+        }
+      
+      case 'docx':
+        try {
+          const mammoth = await import('mammoth');
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          return result.value;
+        } catch (error) {
+          console.error('Error parsing DOCX:', error);
+          throw new Error('Failed to parse DOCX file');
+        }
+      
+      
+      default:
+        throw new Error(`Unsupported file type: ${fileExtension}`);
+    }
+  };
+
+  const handleFiles = async (newFiles: File[]) => {
+    // First, add all files with pending status
+    const initialFiles: BatchFile[] = newFiles.map(file => ({
+      id: Math.random().toString(36).substr(2, 9),
+      name: file.name,
+      file,
+      content: '',
+      status: 'pending' as const
+    }));
+    
+    setFiles(prev => [...prev, ...initialFiles]);
+    
+    // Then process each file asynchronously
+    initialFiles.forEach(async (batchFile) => {
+      try {
+        // Update status to processing
+        setFiles(prev => prev.map(f => 
+          f.id === batchFile.id 
+            ? { ...f, status: 'processing' as const }
+            : f
+        ));
+        
+        // Parse the file content
+        const content = await parseFileContent(batchFile.file);
+        
+        // Update with parsed content and completed status
+        setFiles(prev => prev.map(f => 
+          f.id === batchFile.id 
+            ? { ...f, content, status: 'completed' as const }
+            : f
+        ));
+        
+      } catch (error) {
+        console.error(`Error processing ${batchFile.name}:`, error);
+        
+        // Update with error status
+        setFiles(prev => prev.map(f => 
+          f.id === batchFile.id 
+            ? { ...f, status: 'error' as const }
+            : f
+        ));
+      }
+    });
   };
 
   const removeFile = (id: string) => {
@@ -180,11 +248,19 @@ export default function BatchMode({
   const processAllFiles = async () => {
     if (!parsedData || files.length === 0) return;
     
+    // Only process files that have been successfully parsed
+    const completedFiles = files.filter(file => file.status === 'completed' && file.content.length > 0);
+    
+    if (completedFiles.length === 0) {
+      alert('No files are ready for processing. Please wait for files to finish parsing or check for errors.');
+      return;
+    }
+    
     setIsScoring(true);
     setScores({});
     
     // Create promises for all file-section combinations
-    const promises = files.map(file => {
+    const promises = completedFiles.map(file => {
       const filePromises = [];
       
       // Process responsibilities
@@ -534,14 +610,29 @@ export default function BatchMode({
                 {files.map((file) => (
                   <div
                     key={file.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border-2 border-gray-200"
+                    className={`flex items-center justify-between p-3 rounded-lg border-2 ${
+                      file.status === 'completed' 
+                        ? 'bg-green-50 border-green-200' 
+                        : file.status === 'error'
+                        ? 'bg-red-50 border-red-200'
+                        : file.status === 'processing'
+                        ? 'bg-yellow-50 border-yellow-200'
+                        : 'bg-gray-50 border-gray-200'
+                    }`}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="text-2xl">📄</div>
+                      <div className="text-2xl">
+                        {file.status === 'completed' ? '✅' : 
+                         file.status === 'error' ? '❌' : 
+                         file.status === 'processing' ? '⏳' : '📄'}
+                      </div>
                       <div>
                         <p className="font-medium text-gray-800">{file.name}</p>
                         <p className="text-sm text-gray-500">
-                          Status: {file.status}
+                          {file.status === 'completed' && `Ready (${file.content.length} chars)`}
+                          {file.status === 'processing' && 'Processing...'}
+                          {file.status === 'error' && 'Failed to parse'}
+                          {file.status === 'pending' && 'Pending'}
                         </p>
                       </div>
                     </div>
@@ -574,7 +665,7 @@ export default function BatchMode({
             <input
               type="file"
               multiple
-              accept=".pdf,.doc,.docx,.txt"
+              accept=".pdf,.docx,.txt"
               onChange={handleFileInput}
               className="hidden"
               id="file-upload"
@@ -588,7 +679,7 @@ export default function BatchMode({
                 Drop files here or click to browse
               </p>
               <p className="text-sm text-gray-500">
-                Supports PDF, DOC, DOCX, and TXT files
+                Supports PDF, DOCX, and TXT files
               </p>
             </label>
           </div>
@@ -636,11 +727,11 @@ export default function BatchMode({
                   </NeobrutalistButton>
                   <NeobrutalistButton
                     onClick={processAllFiles}
-                    disabled={!parsedData || files.length === 0 || isScoring}
+                    disabled={!parsedData || files.filter(f => f.status === 'completed').length === 0 || isScoring}
                     color="green"
                     className="px-4 py-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isScoring ? 'Processing...' : 'Process Files'}
+                    {isScoring ? 'Processing...' : `Process Files (${files.filter(f => f.status === 'completed').length} ready)`}
                   </NeobrutalistButton>
                   
                   {/* Sort Controls */}
