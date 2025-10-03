@@ -1,0 +1,28 @@
+Senior Frontend Developer - React/TypeScript
+
+We are looking for a passionate Senior Frontend Developer to join our growing team. You will be responsible for building and maintaining our web applications using React, TypeScript, and modern frontend technologies.
+
+Responsibilities:
+• Develop and maintain React applications using TypeScript
+• Collaborate with designers to implement pixel-perfect UI components
+• Optimize applications for maximum speed and scalability
+• Write clean, maintainable, and well-documented code
+• Participate in code reviews and mentor junior developers
+• Work closely with backend developers to integrate APIs
+• Implement responsive designs that work across all devices
+
+Company Culture:
+• We value work-life balance and offer flexible working hours
+• We encourage continuous learning and professional development
+• We have a collaborative, open-door policy where everyone's ideas matter
+• We celebrate diversity and inclusion in our workplace
+• We believe in giving back to the community through volunteer work
+
+Technical Skills:
+• 5+ years of experience with React and TypeScript
+• Strong knowledge of HTML5, CSS3, and JavaScript ES6+
+• Experience with state management libraries (Redux, Zustand, or Context API)
+• Familiarity with testing frameworks (Jest, React Testing Library)
+• Experience with build tools (Webpack, Vite, or Parcel)
+• Knowledge of version control systems (Git)
+• Experience with CSS preprocessors (Sass, Less) or CSS-in-JS libraries

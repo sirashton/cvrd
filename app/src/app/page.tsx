@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import JobDescriptionPane from '../components/JobDescriptionPane';
 import CoverLetterPane from '../components/CoverLetterPane';
+import BatchMode from '../components/BatchMode';
 import RestoreModal from '../components/RestoreModal';
 import MobileWarning from '../components/MobileWarning';
 import NeobrutalistButton from '../components/NeobrutalistButton';
@@ -10,9 +11,9 @@ import BuyMeACoffeeButton from '../components/BuyMeACoffeeButton';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface ParsedData {
-  responsibilities: string[];
-  companyCulture: string[];
-  technicalSkills: string[];
+  responsibilities: { summary: string; description: string }[];
+  companyCulture: { summary: string; description: string }[];
+  technicalSkills: { summary: string; description: string }[];
 }
 
 export default function Home() {
@@ -22,6 +23,8 @@ export default function Home() {
   const [coverageResults, setCoverageResults] = useState<{[key: string]: {score: number, feedback: string}}>({});
   const [showRestoreModal, setShowRestoreModal] = useState(false);
   const [hasShownRestoreModal, setHasShownRestoreModal] = useState(false);
+  const [currentMode, setCurrentMode] = useState<'single' | 'batch'>('single');
+  const [weights, setWeights] = useState<{[key: string]: number}>({});
   
   const { savedData, hasCheckedStorage, saveData, clearData } = useLocalStorage();
 
@@ -49,6 +52,16 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [jobDescription, coverLetter, parsedData, coverageResults, saveData]);
+
+  // Save data function for batch mode
+  const handleSaveData = () => {
+    saveData({
+      jobDescription,
+      coverLetter,
+      parsedData,
+      coverageResults
+    });
+  };
 
   // Save data when important actions happen
   const handleParseJobDescription = () => {
@@ -93,6 +106,21 @@ export default function Home() {
       setCoverLetter(savedData.coverLetter);
       setParsedData(savedData.parsedData);
       setCoverageResults(savedData.coverageResults);
+      
+      // Initialize weights if we have parsed data
+      if (savedData.parsedData) {
+        const initialWeights: {[key: string]: number} = {};
+        savedData.parsedData.responsibilities.forEach((_, index) => {
+          initialWeights[`resp-${index}`] = 5;
+        });
+        savedData.parsedData.companyCulture.forEach((_, index) => {
+          initialWeights[`culture-${index}`] = 5;
+        });
+        savedData.parsedData.technicalSkills.forEach((_, index) => {
+          initialWeights[`skill-${index}`] = 5;
+        });
+        setWeights(initialWeights);
+      }
     }
     setShowRestoreModal(false);
   };
@@ -153,24 +181,68 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8 w-full">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 h-full">
-          <JobDescriptionPane 
-            jobDescription={jobDescription}
-            setJobDescription={setJobDescription}
-            parsedData={parsedData}
-            setParsedData={setParsedData}
-            coverLetter={coverLetter}
-            coverageResults={coverageResults}
-            setCoverageResults={setCoverageResults}
-            onParseJobDescription={handleParseJobDescription}
-            onCheckCoverage={handleCheckCoverage}
-          />
-          <CoverLetterPane 
-            coverLetter={coverLetter}
-            setCoverLetter={setCoverLetter}
-          />
+      {/* Mode Tabs */}
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-2">
+        <div className="flex justify-center mb-2">
+          <div className="bg-white rounded-lg border-3 border-gray-600 shadow-[3px_3px_0px_0px_rgb(75,85,99)] p-1">
+            <div className="flex">
+              <button
+                onClick={() => setCurrentMode('single')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  currentMode === 'single'
+                    ? 'bg-blue-500 text-white'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                Single Mode
+              </button>
+              <button
+                onClick={() => setCurrentMode('batch')}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  currentMode === 'batch'
+                    ? 'bg-blue-500 text-white'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+              >
+                Batch Mode
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <main className="flex-1 max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-2 sm:py-0 w-full">
+        {currentMode === 'single' ? (
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 h-full">
+            <JobDescriptionPane 
+              jobDescription={jobDescription}
+              setJobDescription={setJobDescription}
+              parsedData={parsedData}
+              setParsedData={setParsedData}
+              coverLetter={coverLetter}
+              coverageResults={coverageResults}
+              setCoverageResults={setCoverageResults}
+              onParseJobDescription={handleParseJobDescription}
+              onCheckCoverage={handleCheckCoverage}
+            />
+            <CoverLetterPane 
+              coverLetter={coverLetter}
+              setCoverLetter={setCoverLetter}
+            />
+          </div>
+        ) : (
+          <div className="col-span-2">
+            <BatchMode 
+              jobDescription={jobDescription}
+              setJobDescription={setJobDescription}
+              parsedData={parsedData}
+              setParsedData={setParsedData}
+              weights={weights}
+              setWeights={setWeights}
+              onSaveData={handleSaveData}
+            />
+          </div>
+        )}
       </main>
 
       <footer className="bg-white border-t border-gray-200 mt-auto">

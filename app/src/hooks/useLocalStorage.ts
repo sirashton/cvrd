@@ -4,9 +4,9 @@ interface SavedData {
   jobDescription: string;
   coverLetter: string;
   parsedData: {
-    responsibilities: string[];
-    companyCulture: string[];
-    technicalSkills: string[];
+    responsibilities: { summary: string; description: string }[];
+    companyCulture: { summary: string; description: string }[];
+    technicalSkills: { summary: string; description: string }[];
   } | null;
   coverageResults: {[key: string]: {score: number, feedback: string}};
   lastSaved: string;

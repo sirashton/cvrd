@@ -6,9 +6,9 @@ import CoverageScore from './CoverageScore';
 import NeobrutalistPanel from './NeobrutalistPanel';
 
 interface ParsedData {
-  responsibilities: string[];
-  companyCulture: string[];
-  technicalSkills: string[];
+  responsibilities: { summary: string; description: string }[];
+  companyCulture: { summary: string; description: string }[];
+  technicalSkills: { summary: string; description: string }[];
 }
 
 interface JobDescriptionPaneProps {
@@ -87,7 +87,7 @@ export default function JobDescriptionPane({
             },
             body: JSON.stringify({ 
               section: 'responsibilities',
-              bulletPoints: parsedData.responsibilities,
+              bulletPoints: parsedData.responsibilities.map(item => item.description),
               coverLetter
             }),
           }).then(async (response) => {
@@ -113,7 +113,7 @@ export default function JobDescriptionPane({
             },
             body: JSON.stringify({ 
               section: 'companyCulture',
-              bulletPoints: parsedData.companyCulture,
+              bulletPoints: parsedData.companyCulture.map(item => item.description),
               coverLetter
             }),
           }).then(async (response) => {
@@ -139,7 +139,7 @@ export default function JobDescriptionPane({
             },
             body: JSON.stringify({ 
               section: 'technicalSkills',
-              bulletPoints: parsedData.technicalSkills,
+              bulletPoints: parsedData.technicalSkills.map(item => item.description),
               coverLetter
             }),
           }).then(async (response) => {
@@ -218,7 +218,7 @@ export default function JobDescriptionPane({
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           {result && <CoverageScore score={result.score} />}
-                          <span className="text-sm text-gray-700">{item}</span>
+                          <span className="text-sm text-gray-700">{item.description}</span>
                         </div>
                         {result && (
                           <div className="mt-1">
@@ -243,7 +243,7 @@ export default function JobDescriptionPane({
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           {result && <CoverageScore score={result.score} />}
-                          <span className="text-sm text-gray-700">{item}</span>
+                          <span className="text-sm text-gray-700">{item.description}</span>
                         </div>
                         {result && (
                           <div className="mt-1">
@@ -268,7 +268,7 @@ export default function JobDescriptionPane({
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           {result && <CoverageScore score={result.score} />}
-                          <span className="text-sm text-gray-700">{item}</span>
+                          <span className="text-sm text-gray-700">{item.description}</span>
                         </div>
                         {result && (
                           <div className="mt-1">

@@ -29,10 +29,29 @@ ${jobDescription}
 
 Please respond with a JSON object in this exact format:
 {
-  "responsibilities": ["responsibility 1", "responsibility 2", ...],
-  "companyCulture": ["culture point 1", "culture point 2", ...],
-  "technicalSkills": ["skill 1", "skill 2", ...]
+  "responsibilities": [
+    {
+      "summary": "1-2 word summary",
+      "description": "full responsibility description"
+    }
+  ],
+  "companyCulture": [
+    {
+      "summary": "1-2 word summary", 
+      "description": "full culture point description"
+    }
+  ],
+  "technicalSkills": [
+    {
+      "summary": "1-2 word summary",
+      "description": "full skill description"
+    }
+  ]
 }
+
+For each item:
+- "summary": Provide a 1-2 word summary that captures the essence (e.g., "React Development", "Team Collaboration", "Python")
+- "description": The full, detailed description of the requirement, but be concise and to the point.
 
 Make each bullet point concise but descriptive. Focus on the most important and specific requirements. Do not infer any information from the job description that is not explicitly stated.
 `;
@@ -72,6 +91,22 @@ Make each bullet point concise but descriptive. Focus on the most important and 
     if (!parsedData.responsibilities || !parsedData.companyCulture || !parsedData.technicalSkills) {
       throw new Error('Invalid response structure from AI');
     }
+
+    // Validate that each item has summary and description
+    const validateItems = (items: { summary: string; description: string }[], category: string) => {
+      if (!Array.isArray(items)) {
+        throw new Error(`Invalid ${category} structure`);
+      }
+      items.forEach((item, index) => {
+        if (!item.summary || !item.description) {
+          throw new Error(`Invalid ${category} item at index ${index}: missing summary or description`);
+        }
+      });
+    };
+
+    validateItems(parsedData.responsibilities, 'responsibilities');
+    validateItems(parsedData.companyCulture, 'companyCulture');
+    validateItems(parsedData.technicalSkills, 'technicalSkills');
 
     return NextResponse.json(parsedData);
 
